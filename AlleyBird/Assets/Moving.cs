@@ -22,6 +22,8 @@ public class Moving : MonoBehaviour
 
     private Camera _camera = null;
 
+    public Action EventTriggerWithEnemy;
+
     private void Awake()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>();
@@ -41,8 +43,19 @@ public class Moving : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //_direction *= -1;
-        //_sprite.flipX = _direction < 0;
+        if(other.GetComponent<Coin>() != null)
+        {
+            GameManger.Instance.Score.ChangeCoins(other.GetComponent<Coin>().Cost);
+            Destroy(other.gameObject);
+        }
+        else if (other.GetComponent<Enemy>() != null)
+        {
+            Debug.Log("Enemy");
+            EventTriggerWithEnemy?.Invoke();
+            _speed = 0;
+            _sprite.flipY = true;
+            UIManager.Instance.ShowUIPanel(TypePanel.Reset);
+        }
     }
     
     private void OnCollisionEnter2D(Collision2D other)

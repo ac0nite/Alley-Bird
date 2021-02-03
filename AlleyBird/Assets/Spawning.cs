@@ -24,11 +24,12 @@ public class Spawning : MonoBehaviour
 
         for (int i = 0; i < _countPlatforms; i++)
         {
-            Spawn();
+            var p = Spawn();
+            if (i > 0) p.SpawnContent();
         }
     }
 
-    private void Spawn()
+    private Platform Spawn()
     {
         Vector3 position = Vector3.zero;
 
@@ -41,6 +42,8 @@ public class Spawning : MonoBehaviour
         _platforms.Add(p);
 
         p.EventDestroyPlatform += OnSpawn;
+
+        return p;
     }
 
     private void OnSpawn()
@@ -48,6 +51,6 @@ public class Spawning : MonoBehaviour
         _platforms[0].EventDestroyPlatform -= OnSpawn;
         _platforms.RemoveAt(0);
 
-        Spawn();
+        Spawn().SpawnContent();
     }
 }

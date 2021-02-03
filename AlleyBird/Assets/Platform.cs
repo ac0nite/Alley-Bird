@@ -11,39 +11,49 @@ public class Platform : MonoBehaviour
 
     private Collider2D _colliderGround = null;
     private Camera _camera = null;
+    private float _widthPlatform = 0f;
 
     private void Awake()
     {
         _colliderGround = GetComponentInChildren<Collider2D>();
         _camera = Camera.main;
+        _widthPlatform =  _camera.ViewportToWorldPoint(Vector3.zero).x + 0.4f;
     }
 
     private void Start()
     {
-        if (UnityEngine.Random.Range(0, 2) == 1)
-        {
-            var o = Instantiate(GameManger.Instance.CoinPrefab, Vector3.zero, Quaternion.identity, transform);
-            Vector3 view = new Vector3(Random.Range(0.1f, 0.9f), 0f, 0f);
-            Vector3 viewWorld = Camera.main.ViewportToWorldPoint(view);
-            o.transform.localPosition = new Vector3(viewWorld.x, 0, 0);
-        }
+        //SpawnContent();
     }
-
-
 
     private void FixedUpdate()
     {
         Vector2 view = _camera.WorldToViewportPoint(transform.position);
         if (view.y < _deltaNeedRemove)
         {
-           // Debug.Log(view, transform.gameObject);
             EventDestroyPlatform?.Invoke();
             Destroy(transform.gameObject);
+        }
+    }
+
+    public void SpawnContent()
+    {
+        if (UnityEngine.Random.Range(0, 2) == 1)
+        {
+            var coin = Instantiate(GameManger.Instance.CoinPrefab, Vector3.zero, Quaternion.identity, transform);
+            coin.transform.localPosition = new Vector3(Random.Range(-_widthPlatform, _widthPlatform), 0, 0);
+        }
+        else if (UnityEngine.Random.Range(0, 3) == 1)
+        {
+            var enemy = Instantiate(
+                GameManger.Instance.EnemyPrefabs[Random.Range(0, GameManger.Instance.EnemyPrefabs.Count)], Vector3.zero,
+                Quaternion.identity, transform);
+            enemy.transform.localPosition = new Vector3(Random.Range(-_widthPlatform, _widthPlatform), -0.09f, 0);
         }
     }
     public void DisableKinematic()
     {
         _colliderGround.isTrigger = false;
+        GameManger.Instance.Score.ChangeScore(+1);
     }
 
     private void OnTriggerExit2D(Collider2D other)
