@@ -9,7 +9,7 @@ public enum TypePanel
     GamePlay = 1,
     Reset = 2
 }
-public class UITypePanel : MonoBehaviour
+public class UIPanel : MonoBehaviour
 {
     public TypePanel Type = TypePanel.GamePlay;
 }

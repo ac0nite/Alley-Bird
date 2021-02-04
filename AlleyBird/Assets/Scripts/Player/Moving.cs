@@ -9,36 +9,18 @@ public class Moving : MonoBehaviour
     private SpriteRenderer _sprite = null;
     private Rigidbody2D _rigidbody = null;
 
-    [Range(1f, 10f)] 
-    [SerializeField] private float _jumpForce = 10;
-    
     private float _direction = 1;
     
     [Range(1f, 10f)] 
     [SerializeField] private float _speed = 1f;
 
-    [SerializeField] private int _maxJump = 2;
-    private int _countJump = 0;
-
     private Camera _camera = null;
-
-    public Action EventTriggerWithEnemy;
 
     private void Awake()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>();
         _rigidbody = GetComponentInChildren<Rigidbody2D>();
         _camera = Camera.main;
-        _countJump = _maxJump;
-        //_rigidbody.isKinematic = true;
-    }
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Space) && _countJump > 0)
-        {
-            _rigidbody.velocity = Vector2.up * _jumpForce;
-            _countJump--;
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -50,29 +32,21 @@ public class Moving : MonoBehaviour
         }
         else if (other.GetComponent<Enemy>() != null)
         {
-            Debug.Log("Enemy");
-            EventTriggerWithEnemy?.Invoke();
             _speed = 0;
             _sprite.flipY = true;
             UIManager.Instance.ShowUIPanel(TypePanel.Reset);
         }
     }
-    
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        _countJump = _maxJump;
-    }
 
     private void FixedUpdate()
     {
         Vector2 view = _camera.WorldToViewportPoint(transform.position);
-        if (view.x < 0.05f || view.x > 0.95f)
+        if (view.x < 0.08f || view.x > 0.95f)
         {
             _direction *= -1;
             _sprite.flipX = _direction < 0;
         }
-        //transform.Translate(_direction.normalized * (_speed * Time.fixedDeltaTime));
 
-        _rigidbody.velocity  = new Vector2(_direction * (_speed * 1), _rigidbody.velocity.y);
+        _rigidbody.velocity  = new Vector2(_direction * (_speed), _rigidbody.velocity.y);
     }
 }

@@ -6,15 +6,15 @@ using UnityEngine;
 
 public class UIManager : SingletoneGameObject<UIManager>
 {
-    private List<UITypePanel> _panels = null;
+    private List<UIPanel> _panels = null;
     private void Awake()
     {
-        _panels = GetComponentsInChildren<UITypePanel>(true).ToList();
+        _panels = GetComponentsInChildren<UIPanel>(true).ToList();
     }
 
     private void Start()
     {
-        ShowUIPanel(TypePanel.GamePlay);
+        ShowUIPanel(TypePanel.Start);
     }
     public void ShowUIPanel(TypePanel type)
     {
@@ -22,5 +22,10 @@ public class UIManager : SingletoneGameObject<UIManager>
         {
             uiTypePanel.gameObject.SetActive(uiTypePanel.Type == type);
         }
+    }
+
+    public UIPanel GetInstancePanel(TypePanel panel)
+    {
+        return _panels.Find(typePanel => typePanel.Type == panel);
     }
 }

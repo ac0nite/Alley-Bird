@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
-    public bool IsMove = false;
+   // public bool IsMove = false;
 
     private void Start()
     {
