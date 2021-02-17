@@ -31,7 +31,7 @@ using UnityEngine;
         protected virtual void Awake()
         {
             if (_instance != null && _instance != this)
-                throw new Exception("Singleton two init!!!");
+                throw new Exception("Singleton two init!");
 
             _instance = (T)this;
 

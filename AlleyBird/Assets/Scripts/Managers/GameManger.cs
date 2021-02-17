@@ -13,4 +13,13 @@ public class GameManger : SingletoneGameObject<GameManger>
     public ScoreManager Score = null;
     public InputManager Input = null;
     public Spawning Spawning = null;
+
+    public float LimitAreaX = 0f;
+
+    private void Start()
+    {
+        //var view = Camera.main.ViewportToWorldPoint(Vector3.zero);
+        //Debug.Log($"limit: {view}");
+        LimitAreaX = -Camera.main.ViewportToWorldPoint(Vector3.zero).x;
+    }
 }

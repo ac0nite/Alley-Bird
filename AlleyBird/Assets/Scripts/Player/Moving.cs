@@ -40,12 +40,32 @@ public class Moving : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 view = _camera.WorldToViewportPoint(transform.position);
-        if (view.x < 0.08f || view.x > 0.95f)
+        var area = GameManger.Instance.LimitAreaX; 
+        //var posX = Mathf.Round(transform.position.x);
+        var posX = transform.position.x;
+        //if (posX < -area || posX > area)
+        //{
+        //    _direction *= -1;
+        //    _sprite.flipX = _direction < 0;
+        //}
+
+        if (posX < -area)
         {
-            _direction *= -1;
+            _direction = 1;
             _sprite.flipX = _direction < 0;
         }
+        else if (posX > area)
+        {
+            _direction = -1;
+            _sprite.flipX = _direction < 0;
+        }
+
+        //Vector2 view = _camera.WorldToViewportPoint(transform.position);
+        //if (view.x < 0.08f || view.x > 0.95f)
+        //{
+        //    _direction *= -1;
+        //    _sprite.flipX = _direction < 0;
+        //}
 
         _rigidbody.velocity  = new Vector2(_direction * (_speed), _rigidbody.velocity.y);
     }
